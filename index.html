@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Søften Tagrenovering Beregner</title>
+    <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.7"></script>
+    <link rel="stylesheet" href="/tailwind.css" />
+  </head>
+  <body>
+    <div class="py-32 container mx-auto">
+      <form
+        class="p-8 bg-gray-100 grid gap-4 max-w-prose"
+        _="on submit halt the event
+          if the value of #landsdel is '' then
+            put '' into #landsdelResult
+            show .error
+            put 'Vælg landsdel' into .error
+          else
+            put the text of #landsdel.options[#landsdel.selectedIndex] into #landsdelResult
+            hide me
+            show the next <form/>
+          end"
+      >
+        <h2 class="text-2xl font-semibold tracking-wide">Landsdel</h2>
+
+        <select id="landsdel" class="px-4 py-2" _="on change hide .error">
+          <option value="">Vælg landsdel</option>
+          <option value="1">Nordjylland</option>
+          <option value="2">Midtjylland</option>
+          <option value="3">Syddanmark</option>
+          <option value="4">Sjælland</option>
+          <option value="5">Hovedstaden</option>
+        </select>
+
+        <p class="error text-red-500" style="display: none"></p>
+
+        <p class="text-gray-500">
+          Der er indregnet et tillæg på arbejde på Sjælland pga. transport og
+          evt. bolig til vores folk som alle er fra Jylland.
+        </p>
+
+        <div class="flex gap-2">
+          <button
+            class="px-4 py-2 rounded bg-white border border-gray-200"
+            type="submit"
+          >
+            Næste
+          </button>
+        </div>
+      </form>
+
+      <form
+        class="p-8 bg-gray-100 grid gap-4 max-w-prose"
+        style="display: none"
+        _="on submit halt the event
+          if the value of #tagtype is '' then
+            put '' into #tagtypeResult
+            show .error
+            put 'Vælg nuværende tag' into .error
+          else
+            put the text of #tagtype.options[#tagtype.selectedIndex] into #tagtypeResult
+            hide me
+            show the next <form/>
+          end"
+      >
+        <h2 class="text-2xl font-semibold tracking-wide">Nuværende tag</h2>
+
+        <select id="tagtype" class="px-4 py-2" _="on change hide .error">
+          <option value="">Vælg nuværende tag</option>
+          <option value="1">Bølgetag/eternit</option>
+          <option value="2">Skifer</option>
+          <option value="3">Teglsten/betonsten</option>
+        </select>
+
+        <p class="error text-red-500" style="display: none"></p>
+
+        <p class="text-gray-500">
+          Er dit nuværende tag f.eks bølge eller skiffer eternit?
+        </p>
+
+        <div class="flex gap-2">
+          <button
+            class="px-4 py-2 rounded bg-white border border-gray-200"
+            type="button"
+            _="on click hide me.closest('form') show me.closest('form').previousElementSibling"
+          >
+            Forrige
+          </button>
+
+          <button
+            class="px-4 py-2 rounded bg-white border border-gray-200"
+            type="submit"
+          >
+            Næste
+          </button>
+        </div>
+      </form>
+
+      <form
+        class="p-8 bg-gray-100 grid gap-4 max-w-prose"
+        style="display: none"
+        _="on submit halt the event
+          if the value of #grundplan is '' then
+            put '' into #grundplanResult
+            show .error
+            put 'Det felt skal udfyldes.' into .error
+          else
+            put the value of #grundplan into #grundplanResult
+            hide me
+            show the next <form/>
+          end"
+      >
+        <h2 class="text-2xl font-semibold tracking-wide">Grundplan</h2>
+
+        <input id="grundplan" class="px-4 py-2" type="number" />
+
+        <p class="error text-red-500" style="display: none"></p>
+
+        <p class="text-gray-500">
+          Boligareal + evt. m2 under tag (f.eks. 110 m2 bolig + 30 m2 overdækket
+          terrasse = 130 m2). Der laves en udregning ud fra m2 på selve
+          grundplanen af boligen - dvs. er huset 100 m2 i grundplan tastes der
+          100 ind herover.
+        </p>
+
+        <div class="flex gap-2">
+          <button
+            class="px-4 py-2 rounded bg-white border border-gray-200"
+            type="button"
+            _="on click hide me.closest('form') show me.closest('form').previousElementSibling"
+          >
+            Forrige
+          </button>
+
+          <button
+            class="px-4 py-2 rounded bg-white border border-gray-200"
+            type="submit"
+          >
+            Næste
+          </button>
+        </div>
+      </form>
+
+      <form
+        class="p-8 bg-gray-100 grid gap-4 max-w-prose"
+        style="display: none"
+        _="on submit halt the event
+          if the value of #hustype is '' then
+            put '' into #hustypeResult
+            show .error
+            put 'Det felt skal udfyldes.' into .error
+          else
+            put the text of #hustype.options[#hustype.selectedIndex] into #hustypeResult
+            hide me
+            show the next <form/>
+          end"
+      >
+        <h2 class="text-2xl font-semibold tracking-wide">Hustype</h2>
+
+        <select id="hustype" class="px-4 py-2" _="on change hide .error">
+          <option value="">Vælg hustype</option>
+          <option value="1">Længehus</option>
+          <option value="2">Vinkelhus</option>
+        </select>
+
+        <p class="error text-red-500" style="display: none"></p>
+
+        <p class="text-gray-500">
+          Er huset et længehus (med 2 sider) eller et vinkelhus (med skotrender
+          og/eller valme)?
+        </p>
+
+        <div class="flex gap-2">
+          <button
+            class="px-4 py-2 rounded bg-white border border-gray-200"
+            type="button"
+            _="on click hide me.closest('form') show me.closest('form').previousElementSibling"
+          >
+            Forrige
+          </button>
+
+          <button
+            class="px-4 py-2 rounded bg-white border border-gray-200"
+            type="submit"
+          >
+            Næste
+          </button>
+        </div>
+      </form>
+
+      <form
+        class="p-8 bg-gray-100 grid gap-4 max-w-prose"
+        style="display: none"
+        _="on submit halt the event
+          if the value of #taghaeldning is '' then
+            put '' into #taghaeldningResult
+            show .error
+            put 'Det felt skal udfyldes.' into .error
+          else
+            put the text of #taghaeldning.options[#taghaeldning.selectedIndex] into #taghaeldningResult
+            hide me
+            show the next <form/>
+          end"
+      >
+        <h2 class="text-2xl font-semibold tracking-wide">Taghældning</h2>
+
+        <select id="taghaeldning" class="px-4 py-2" _="on change hide .error">
+          <option value="">Vælg taghældning</option>
+          <option value="1">Lav (1-plans hus)</option>
+          <option value="2">Høj (2-plans hus)</option>
+        </select>
+
+        <p class="error text-red-500" style="display: none"></p>
+
+        <p class="text-gray-500">Er dit hus med høj eller lav rejsning?</p>
+
+        <div class="flex gap-2">
+          <button
+            class="px-4 py-2 rounded bg-white border border-gray-200"
+            type="button"
+            _="on click hide me.closest('form') show me.closest('form').previousElementSibling"
+          >
+            Forrige
+          </button>
+
+          <button
+            class="px-4 py-2 rounded bg-white border border-gray-200"
+            type="submit"
+          >
+            Næste
+          </button>
+        </div>
+      </form>
+
+      <form
+        class="p-8 bg-gray-100 grid gap-4 max-w-prose"
+        style="display: none"
+        _="on submit halt the event
+          if the value of #tagbelaegning is '' then
+            put '' into #tagbelaegningResult
+            show .error
+            put 'Det felt skal udfyldes.' into .error
+          else
+            put the text of #tagbelaegning.options[#tagbelaegning.selectedIndex] into #tagbelaegningResult
+            put the textContent of #eksisterendeTag.querySelector('input:checked + label') into #eksisterendeTagResult
+            hide me
+            send calculatePrice to the next <form/>
+            show the next <form/>
+          end"
+      >
+        <h2 class="text-2xl font-semibold tracking-wide">
+          Ønsket tagbelægning
+        </h2>
+
+        <select
+          id="tagbelaegning"
+          class="px-4 py-2"
+          _="on change
+            hide .error
+            if ['1', '2', '3'].includes(the value of me) then
+              show #eksisterendeTag
+            else
+              put '' into #eksisterendeTagResult
+              hide #eksisterendeTag
+            end"
+        >
+          <option value="">Vælg ønsket tagbelægning</option>
+          <option value="1">AeroDek Tradition/Metrotile Quartz</option>
+          <option value="2">AeroDek Uniq/Metrotile Prestige</option>
+          <option value="3">AeroDek Quadro</option>
+          <option value="4">Bølge eternit</option>
+          <option value="5">Skifer eternit</option>
+          <option value="6">Tegl, vingesten</option>
+          <option value="7">Tegl, engoberet vingesten</option>
+          <option value="8">Tegl, fals</option>
+          <option value="9">Betonsten</option>
+          <option value="10">Rensning og maling</option>
+        </select>
+
+        <div id="eksisterendeTag" role="radio-group" style="display: none">
+          <h3 class="text-lg font-medium">Eksisterende tag</h3>
+
+          <input type="radio" id="option1" name="tag" value="option1" />
+          <label for="option1">
+            Eksisterende tag skal af og undertag skal etableres
+          </label>
+
+          <br />
+
+          <input type="radio" id="option2" name="tag" value="option2" />
+          <label for="option2">Taget skal lægges ovenpå eksisterende tag</label>
+        </div>
+
+        <p class="error text-red-500" style="display: none"></p>
+
+        <p class="text-gray-500">Vælg den belægning du går og drømmer om.</p>
+
+        <div class="flex gap-2">
+          <button
+            class="px-4 py-2 rounded bg-white border border-gray-200"
+            type="button"
+            _="on click hide me.closest('form') show me.closest('form').previousElementSibling"
+          >
+            Forrige
+          </button>
+
+          <button
+            class="px-4 py-2 rounded bg-white border border-gray-200"
+            type="submit"
+          >
+            Næste
+          </button>
+        </div>
+      </form>
+
+      <form
+        class="p-8 bg-gray-100 grid gap-4 max-w-prose"
+        hx-post="/result"
+        style="display: none"
+        _="on calculatePrice put '20,570.00 DKK' into .prisResult"
+      >
+        <div class="space-y-1">
+          <h2 class="text-2xl font-semibold tracking-wide">Din pris</h2>
+          <p class="prisResult text-5xl font-bold"></p>
+          <p class="text-gray-500">
+            Prisen er inkl. moms. Ved evt. kviste, Velux/ovenlys-vinduer skal
+            man forvente en merpris.
+          </p>
+        </div>
+
+        <h2 class="text-2xl font-semibold tracking-wide">
+          Dine indtastede oplysninger
+        </h2>
+
+        <div class="space-y-1">
+          <h3 class="text-lg font-medium">Din beliggenhed</h3>
+          <p id="landsdelResult"></p>
+        </div>
+
+        <div class="space-y-1">
+          <h3 class="text-lg font-medium">Nuværende tag</h3>
+          <p id="tagtypeResult"></p>
+        </div>
+
+        <div class="space-y-1">
+          <h3 class="text-lg font-medium">Grundplan</h3>
+          <p id="grundplanResult"></p>
+        </div>
+
+        <div class="space-y-1">
+          <h3 class="text-lg font-medium">Hustype</h3>
+          <p id="hustypeResult"></p>
+        </div>
+
+        <div class="space-y-1">
+          <h3 class="text-lg font-medium">Taghældning</h3>
+          <p id="taghaeldningResult"></p>
+        </div>
+
+        <div class="space-y-1">
+          <h3 class="text-lg font-medium">Ønsket tagbelægning</h3>
+          <p id="tagbelaegningResult"></p>
+        </div>
+
+        <div class="space-y-1">
+          <h3 class="text-lg font-medium">Eksisterende tag</h3>
+          <p id="eksisterendeTagResult"></p>
+        </div>
+
+        <div class="space-y-1">
+          <h3 class="text-lg font-medium">Pris</h3>
+          <p class="prisResult"></p>
+        </div>
+
+        <div class="flex gap-2">
+          <button
+            class="px-4 py-2 rounded bg-white border border-gray-200"
+            type="button"
+            _="on click hide me.closest('form') show me.closest('form').previousElementSibling"
+          >
+            Forrige
+          </button>
+
+          <button
+            class="px-4 py-2 rounded bg-white border border-gray-200"
+            type="submit"
+          >
+            Book aftale
+          </button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
