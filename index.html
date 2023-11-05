@@ -25,7 +25,7 @@
       >
         <h2 class="text-2xl font-semibold tracking-wide">Landsdel</h2>
 
-        <select id="landsdel" class="px-4 py-2" _="on change hide .error">
+        <select id="landsdel" class="px-4 py-2 rounded border border-gray-200" _="on change hide .error">
           <option value="">Vælg landsdel</option>
           <option value="1">Nordjylland</option>
           <option value="2">Midtjylland</option>
@@ -67,7 +67,7 @@
       >
         <h2 class="text-2xl font-semibold tracking-wide">Nuværende tag</h2>
 
-        <select id="tagtype" class="px-4 py-2" _="on change hide .error">
+        <select id="tagtype" class="px-4 py-2 rounded border border-gray-200" _="on change hide .error">
           <option value="">Vælg nuværende tag</option>
           <option value="1">Bølgetag/eternit</option>
           <option value="2">Skifer</option>
@@ -114,7 +114,7 @@
       >
         <h2 class="text-2xl font-semibold tracking-wide">Grundplan</h2>
 
-        <input id="grundplan" class="px-4 py-2" type="number" />
+        <input id="grundplan" class="px-4 py-2 rounded border border-gray-200" type="number" />
 
         <p class="error text-red-500" style="display: none"></p>
 
@@ -159,7 +159,7 @@
       >
         <h2 class="text-2xl font-semibold tracking-wide">Hustype</h2>
 
-        <select id="hustype" class="px-4 py-2" _="on change hide .error">
+        <select id="hustype" class="px-4 py-2 rounded border border-gray-200" _="on change hide .error">
           <option value="">Vælg hustype</option>
           <option value="1">Længehus</option>
           <option value="2">Vinkelhus</option>
@@ -206,7 +206,7 @@
       >
         <h2 class="text-2xl font-semibold tracking-wide">Taghældning</h2>
 
-        <select id="taghaeldning" class="px-4 py-2" _="on change hide .error">
+        <select id="taghaeldning" class="px-4 py-2 rounded border border-gray-200" _="on change hide .error">
           <option value="">Vælg taghældning</option>
           <option value="1">Lav (1-plans hus)</option>
           <option value="2">Høj (2-plans hus)</option>
@@ -244,7 +244,9 @@
             put 'Det felt skal udfyldes.' into .error
           else
             put the text of #tagbelaegning.options[#tagbelaegning.selectedIndex] into #tagbelaegningResult
-            put the textContent of #eksisterendeTag.querySelector('input:checked + label') into #eksisterendeTagResult
+            if #eksisterendeTag.querySelector('input:checked') is not null then
+              put the textContent of #eksisterendeTag.querySelector('input:checked + label') into #eksisterendeTagResult
+            end
             hide me
             send calculatePrice to the next <form/>
             show the next <form/>
@@ -256,7 +258,7 @@
 
         <select
           id="tagbelaegning"
-          class="px-4 py-2"
+          class="px-4 py-2 rounded border border-gray-200"
           _="on change
             hide .error
             if ['1', '2', '3'].includes(the value of me) then
