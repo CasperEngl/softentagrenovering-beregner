@@ -7,6 +7,29 @@
     <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
     <script src="https://unpkg.com/htmx.org@1.9.7"></script>
     <link rel="stylesheet" href="/tailwind.css" />
+
+    <script>
+      function isElementVisible(element) {
+        if (element) {
+          let style = window.getComputedStyle(element);
+
+          if (
+            style.display === "none" ||
+            style.visibility !== "visible" ||
+            style.opacity === "0" ||
+            element.offsetHeight === 0 ||
+            element.offsetWidth === 0
+          ) {
+            return false; // element is hidden
+          } else {
+            return true; // element is visible
+          }
+        } else {
+          // element does not exist
+          return false;
+        }
+      }
+    </script>
   </head>
   <body>
     <div class="py-32 container mx-auto">
@@ -19,13 +42,20 @@
             put 'Vælg landsdel' into .error
           else
             put the text of #landsdel.options[#landsdel.selectedIndex] into #landsdelResult
-            hide me
-            show the next <form/>
+            
+            if not call isElementVisible(me.querySelector('.error')) then
+              hide me
+              show the next <form/>
+            end
           end"
       >
         <h2 class="text-2xl font-semibold tracking-wide">Landsdel</h2>
 
-        <select id="landsdel" class="px-4 py-2 rounded border border-gray-200" _="on change hide .error">
+        <select
+          id="landsdel"
+          class="px-4 py-2 rounded border border-gray-200"
+          _="on change hide .error"
+        >
           <option value="">Vælg landsdel</option>
           <option value="1">Nordjylland</option>
           <option value="2">Midtjylland</option>
@@ -61,13 +91,20 @@
             put 'Vælg nuværende tag' into .error
           else
             put the text of #tagtype.options[#tagtype.selectedIndex] into #tagtypeResult
-            hide me
-            show the next <form/>
+            
+            if not call isElementVisible(me.querySelector('.error')) then
+              hide me
+              show the next <form/>
+            end
           end"
       >
         <h2 class="text-2xl font-semibold tracking-wide">Nuværende tag</h2>
 
-        <select id="tagtype" class="px-4 py-2 rounded border border-gray-200" _="on change hide .error">
+        <select
+          id="tagtype"
+          class="px-4 py-2 rounded border border-gray-200"
+          _="on change hide .error"
+        >
           <option value="">Vælg nuværende tag</option>
           <option value="1">Bølgetag/eternit</option>
           <option value="2">Skifer</option>
@@ -108,13 +145,20 @@
             put 'Det felt skal udfyldes.' into .error
           else
             put the value of #grundplan into #grundplanResult
-            hide me
-            show the next <form/>
+            
+            if not call isElementVisible(me.querySelector('.error')) then
+              hide me
+              show the next <form/>
+            end
           end"
       >
         <h2 class="text-2xl font-semibold tracking-wide">Grundplan</h2>
 
-        <input id="grundplan" class="px-4 py-2 rounded border border-gray-200" type="number" />
+        <input
+          id="grundplan"
+          class="px-4 py-2 rounded border border-gray-200"
+          type="number"
+        />
 
         <p class="error text-red-500" style="display: none"></p>
 
@@ -153,13 +197,20 @@
             put 'Det felt skal udfyldes.' into .error
           else
             put the text of #hustype.options[#hustype.selectedIndex] into #hustypeResult
-            hide me
-            show the next <form/>
+            
+            if not call isElementVisible(me.querySelector('.error')) then
+              hide me
+              show the next <form/>
+            end
           end"
       >
         <h2 class="text-2xl font-semibold tracking-wide">Hustype</h2>
 
-        <select id="hustype" class="px-4 py-2 rounded border border-gray-200" _="on change hide .error">
+        <select
+          id="hustype"
+          class="px-4 py-2 rounded border border-gray-200"
+          _="on change hide .error"
+        >
           <option value="">Vælg hustype</option>
           <option value="1">Længehus</option>
           <option value="2">Vinkelhus</option>
@@ -200,13 +251,20 @@
             put 'Det felt skal udfyldes.' into .error
           else
             put the text of #taghaeldning.options[#taghaeldning.selectedIndex] into #taghaeldningResult
-            hide me
-            show the next <form/>
+            
+            if not call isElementVisible(me.querySelector('.error')) then
+              hide me
+              show the next <form/>
+            end
           end"
       >
         <h2 class="text-2xl font-semibold tracking-wide">Taghældning</h2>
 
-        <select id="taghaeldning" class="px-4 py-2 rounded border border-gray-200" _="on change hide .error">
+        <select
+          id="taghaeldning"
+          class="px-4 py-2 rounded border border-gray-200"
+          _="on change hide .error"
+        >
           <option value="">Vælg taghældning</option>
           <option value="1">Lav (1-plans hus)</option>
           <option value="2">Høj (2-plans hus)</option>
@@ -238,19 +296,30 @@
         class="p-8 bg-gray-100 grid gap-4 max-w-prose"
         style="display: none"
         _="on submit halt the event
-          if the value of #tagbelaegning is '' then
-            put '' into #tagbelaegningResult
-            show .error
-            put 'Det felt skal udfyldes.' into .error
-          else
-            put the text of #tagbelaegning.options[#tagbelaegning.selectedIndex] into #tagbelaegningResult
-            if #eksisterendeTag.querySelector('input:checked') is not null then
+        if the value of #tagbelaegning is '' then
+          put '' into #tagbelaegningResult
+          show .error
+          put 'Det felt skal udfyldes.' into .error
+        else
+          put the text of #tagbelaegning.options[#tagbelaegning.selectedIndex] into #tagbelaegningResult
+
+          if #eksisterendeTag is :visible then
+            if the textContent of #eksisterendeTag.querySelector('input:checked + label') is '' then
+              put 'Eksisterende tag skal udfyldes.' into .error
+              show .error
+            else
               put the textContent of #eksisterendeTag.querySelector('input:checked + label') into #eksisterendeTagResult
             end
+          else
+            put 'Intet valgt' into #eksisterendeTagResult
+          end
+
+          if not call isElementVisible(me.querySelector('.error')) then
             hide me
-            send calculatePrice to the next <form/>
             show the next <form/>
-          end"
+            send calculatePrice to the next <form/>
+          end
+        end"
       >
         <h2 class="text-2xl font-semibold tracking-wide">
           Ønsket tagbelægning
@@ -264,7 +333,6 @@
             if ['1', '2', '3'].includes(the value of me) then
               show #eksisterendeTag
             else
-              put '' into #eksisterendeTagResult
               hide #eksisterendeTag
             end"
         >
