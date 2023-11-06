@@ -7,6 +7,13 @@
     <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
     <script src="https://unpkg.com/htmx.org@1.9.7"></script>
     <link rel="stylesheet" href="/style.css" />
+
+    <script>
+      function calculatePrice() {
+        console.log("calculating price....");
+        return "20,570.00 DKK";
+      }
+    </script>
   </head>
   <body>
     <div class="py-32 container mx-auto">
@@ -14,18 +21,18 @@
         <form
           class="grid gap-4 max-w-prose"
           _="on submit halt the event
-          if the value of #landsdel then
+          if value of #landsdel then
             put the text of #landsdel.options[#landsdel.selectedIndex] into #landsdelResult
 
-            get the *display of .error in me
-            if the result is 'none' then
-              hide me
-              show the next <form/>
+            if my.querySelector('.error.hidden') then
+              toggle .hidden on me
+              remove .hidden from the next <form/>
+              add .grid to the next <form/>
             end
           else
             put '' into #landsdelResult
-            show .error
-            put 'Vælg landsdel' into .error
+            remove .hidden from .error in me
+            put 'Dette felt skal udfyldes' into .error in me
           end"
         >
           <h2 class="text-2xl font-semibold tracking-wide">Landsdel</h2>
@@ -33,7 +40,7 @@
           <select
             id="landsdel"
             class="px-4 py-2 rounded border border-gray-200"
-            _="on change hide .error"
+            _="on input add .hidden to .error in my.closest('form')"
           >
             <option value="">Vælg landsdel</option>
             <option value="1">Nordjylland</option>
@@ -43,7 +50,7 @@
             <option value="5">Hovedstaden</option>
           </select>
 
-          <p class="error text-red-500" style="display: none"></p>
+          <p class="error hidden text-red-500"></p>
 
           <p class="text-gray-500">
             Der er indregnet et tillæg på arbejde på Sjælland pga. transport og
@@ -61,21 +68,20 @@
         </form>
 
         <form
-          class="grid gap-4 max-w-prose"
-          style="display: none"
+          class="hidden gap-4 max-w-prose"
           _="on submit halt the event
-          if the value of #tagtype then
+          if value of #tagtype then
             put the text of #tagtype.options[#tagtype.selectedIndex] into #tagtypeResult
             
-            get the *display of .error in me
-            if the result is 'none' then
-              hide me
-              show the next <form/>
+            if my.querySelector('.error.hidden') then
+              toggle .hidden on me
+              remove .hidden from the next <form/>
+              add .grid to the next <form/>
             end
           else
             put '' into #tagtypeResult
-            show .error
-            put 'Vælg nuværende tag' into .error
+            remove .hidden from .error in me
+            put 'Dette felt skal udfyldes' into .error in me
           end"
         >
           <h2 class="text-2xl font-semibold tracking-wide">Nuværende tag</h2>
@@ -83,7 +89,7 @@
           <select
             id="tagtype"
             class="px-4 py-2 rounded border border-gray-200"
-            _="on change hide .error"
+            _="on input add .hidden to .error in my.closest('form')"
           >
             <option value="">Vælg nuværende tag</option>
             <option value="1">Bølgetag/eternit</option>
@@ -91,7 +97,7 @@
             <option value="3">Teglsten/betonsten</option>
           </select>
 
-          <p class="error text-red-500" style="display: none"></p>
+          <p class="error hidden text-red-500"></p>
 
           <p class="text-gray-500">
             Er dit nuværende tag f.eks bølge eller skiffer eternit?
@@ -101,7 +107,7 @@
             <button
               class="px-4 py-2 rounded bg-white border border-gray-200"
               type="button"
-              _="on click hide me.closest('form') show me.closest('form').previousElementSibling"
+              _="on click toggle .hidden on my.closest('form') then toggle .hidden on my.closest('form').previousElementSibling"
             >
               Forrige
             </button>
@@ -116,21 +122,20 @@
         </form>
 
         <form
-          class="grid gap-4 max-w-prose"
-          style="display: none"
+          class="hidden gap-4 max-w-prose"
           _="on submit halt the event
-          if the value of #grundplan then
+          if value of #grundplan then
             put the value of #grundplan into #grundplanResult
             
-            get the *display of .error in me
-            if the result is 'none' then
-              hide me
-              show the next <form/>
+            if my.querySelector('.error.hidden') then
+              toggle .hidden on me
+              remove .hidden from the next <form/>
+              add .grid to the next <form/>
             end
           else
             put '' into #grundplanResult
-            show .error
-            put 'Det felt skal udfyldes.' into .error
+            remove .hidden from .error in me
+            put 'Dette felt skal udfyldes.' into .error in me
           end"
         >
           <h2 class="text-2xl font-semibold tracking-wide">Grundplan</h2>
@@ -139,9 +144,10 @@
             id="grundplan"
             class="px-4 py-2 rounded border border-gray-200"
             type="number"
+            _="on input add .hidden to .error in my.closest('form')"
           />
 
-          <p class="error text-red-500" style="display: none"></p>
+          <p class="error hidden text-red-500"></p>
 
           <p class="text-gray-500">
             Boligareal + evt. m2 under tag (f.eks. 110 m2 bolig + 30 m2
@@ -154,7 +160,7 @@
             <button
               class="px-4 py-2 rounded bg-white border border-gray-200"
               type="button"
-              _="on click hide me.closest('form') show me.closest('form').previousElementSibling"
+              _="on click toggle .hidden on my.closest('form') then toggle .hidden on my.closest('form').previousElementSibling"
             >
               Forrige
             </button>
@@ -169,21 +175,20 @@
         </form>
 
         <form
-          class="grid gap-4 max-w-prose"
-          style="display: none"
+          class="hidden gap-4 max-w-prose"
           _="on submit halt the event
-          if the value of #hustype then
+          if value of #hustype then
             put the text of #hustype.options[#hustype.selectedIndex] into #hustypeResult
             
-            get the *display of .error in me
-            if the result is 'none' then
-              hide me
-              show the next <form/>
+            if my.querySelector('.error.hidden') then
+              toggle .hidden on me
+              remove .hidden from the next <form/>
+              add .grid to the next <form/>
             end
           else
             put '' into #hustypeResult
-            show .error
-            put 'Det felt skal udfyldes.' into .error
+            remove .hidden from .error in me
+            put 'Dette felt skal udfyldes.' into .error in me
           end"
         >
           <h2 class="text-2xl font-semibold tracking-wide">Hustype</h2>
@@ -191,14 +196,14 @@
           <select
             id="hustype"
             class="px-4 py-2 rounded border border-gray-200"
-            _="on change hide .error"
+            _="on input add .hidden to .error in my.closest('form')"
           >
             <option value="">Vælg hustype</option>
             <option value="1">Længehus</option>
             <option value="2">Vinkelhus</option>
           </select>
 
-          <p class="error text-red-500" style="display: none"></p>
+          <p class="error hidden text-red-500"></p>
 
           <p class="text-gray-500">
             Er huset et længehus (med 2 sider) eller et vinkelhus (med
@@ -209,7 +214,7 @@
             <button
               class="px-4 py-2 rounded bg-white border border-gray-200"
               type="button"
-              _="on click hide me.closest('form') show me.closest('form').previousElementSibling"
+              _="on click toggle .hidden on my.closest('form') then toggle .hidden on my.closest('form').previousElementSibling"
             >
               Forrige
             </button>
@@ -224,21 +229,20 @@
         </form>
 
         <form
-          class="grid gap-4 max-w-prose"
-          style="display: none"
+          class="hidden gap-4 max-w-prose"
           _="on submit halt the event
-          if the value of #taghaeldning then
+          if value of #taghaeldning then
             put the text of #taghaeldning.options[#taghaeldning.selectedIndex] into #taghaeldningResult
             
-            get the *display of .error in me
-            if the result is 'none' then
-              hide me
-              show the next <form/>
+            if my.querySelector('.error.hidden') then
+              toggle .hidden on me
+              remove .hidden from the next <form/>
+              add .grid to the next <form/>
             end
           else
             put '' into #taghaeldningResult
-            show .error
-            put 'Det felt skal udfyldes.' into .error
+            remove .hidden from .error in me
+            put 'Dette felt skal udfyldes.' into .error in me
           end"
         >
           <h2 class="text-2xl font-semibold tracking-wide">Taghældning</h2>
@@ -246,14 +250,14 @@
           <select
             id="taghaeldning"
             class="px-4 py-2 rounded border border-gray-200"
-            _="on change hide .error"
+            _="on input add .hidden to .error in my.closest('form')"
           >
             <option value="">Vælg taghældning</option>
             <option value="1">Lav (1-plans hus)</option>
             <option value="2">Høj (2-plans hus)</option>
           </select>
 
-          <p class="error text-red-500" style="display: none"></p>
+          <p class="error hidden text-red-500"></p>
 
           <p class="text-gray-500">Er dit hus med høj eller lav rejsning?</p>
 
@@ -261,7 +265,7 @@
             <button
               class="px-4 py-2 rounded bg-white border border-gray-200"
               type="button"
-              _="on click hide me.closest('form') show me.closest('form').previousElementSibling"
+              _="on click toggle .hidden on my.closest('form') then toggle .hidden on my.closest('form').previousElementSibling"
             >
               Forrige
             </button>
@@ -276,39 +280,32 @@
         </form>
 
         <form
-          class="grid gap-4 max-w-prose"
-          style="display: none"
+          class="hidden gap-4 max-w-prose"
           _="on submit halt the event
-          if the value of #tagbelaegning then
+          if value of #tagbelaegning then
             put the text of #tagbelaegning.options[#tagbelaegning.selectedIndex] into #tagbelaegningResult
 
-            get the *display of #eksisterendeTag
-            if the result is 'none' then
-              log 'not visible'
+            if #eksisterendeTag matches .hidden then
               put 'Valg ikke nødvendigt' into #eksisterendeTagResult
             else
-              log 'visible'
-
               if the textContent of #eksisterendeTag.querySelector('input:checked + label') then
-                log 'not empty'
                 put the textContent of #eksisterendeTag.querySelector('input:checked + label') into #eksisterendeTagResult
               else
-                log 'empty'
                 put 'Eksisterende tag skal udfyldes.' into .error
-                show .error
+                remove .hidden from .error in me
               end
             end
 
-            get the *display of .error in me
-            if the result is 'none' then
-              hide me
-              show the next <form/>
+            if my.querySelector('.error.hidden') then
+              toggle .hidden on me
+              remove .hidden from the next <form/>
+              add .grid to the next <form/>
               send calculatePrice to the next <form/>
             end
           else
             put '' into #tagbelaegningResult
-            show .error
-            put 'Det felt skal udfyldes.' into .error
+            remove .hidden from .error in me
+            put 'Dette felt skal udfyldes.' into .error in me
           end"
         >
           <h2 class="text-2xl font-semibold tracking-wide">
@@ -319,11 +316,12 @@
             id="tagbelaegning"
             class="px-4 py-2 rounded border border-gray-200"
             _="on change
-            hide .error
+            add .hidden to .error in my.closest('form')
+
             if ['1', '2', '3'].includes(the value of me) then
-              show #eksisterendeTag
+              remove .hidden from #eksisterendeTag
             else
-              hide #eksisterendeTag
+              add .hidden to #eksisterendeTag
             end"
           >
             <option value="">Vælg ønsket tagbelægning</option>
@@ -339,7 +337,7 @@
             <option value="10">Rensning og maling</option>
           </select>
 
-          <div id="eksisterendeTag" role="radio-group" style="display: none">
+          <div id="eksisterendeTag" role="radio-group" class="hidden">
             <h3 class="text-lg font-medium">Eksisterende tag</h3>
 
             <input
@@ -347,7 +345,7 @@
               id="option1"
               name="tag"
               value="option1"
-              _="on change hide .error"
+              _="on input add .hidden to .error in my.closest('form')"
             />
             <label for="option1">
               Eksisterende tag skal af og undertag skal etableres
@@ -360,14 +358,14 @@
               id="option2"
               name="tag"
               value="option2"
-              _="on change hide .error"
+              _="on input add .hidden to .error in my.closest('form')"
             />
             <label for="option2"
               >Taget skal lægges ovenpå eksisterende tag</label
             >
           </div>
 
-          <p class="error text-red-500" style="display: none"></p>
+          <p class="error hidden text-red-500"></p>
 
           <p class="text-gray-500">Vælg den belægning du går og drømmer om.</p>
 
@@ -375,7 +373,7 @@
             <button
               class="px-4 py-2 rounded bg-white border border-gray-200"
               type="button"
-              _="on click hide me.closest('form') show me.closest('form').previousElementSibling"
+              _="on click toggle .hidden on my.closest('form') then toggle .hidden on my.closest('form').previousElementSibling"
             >
               Forrige
             </button>
@@ -390,10 +388,9 @@
         </form>
 
         <form
-          class="grid gap-4 max-w-prose"
+          class="hidden gap-4 max-w-prose"
           hx-post="/result"
-          style="display: none"
-          _="on calculatePrice put '20,570.00 DKK' into .prisResult"
+          _="on calculatePrice call calculatePrice() put the result into .prisResult"
         >
           <div class="space-y-1">
             <h2 class="text-2xl font-semibold tracking-wide">Din pris</h2>
@@ -452,7 +449,7 @@
             <button
               class="px-4 py-2 rounded bg-white border border-gray-200"
               type="button"
-              _="on click hide me.closest('form') show me.closest('form').previousElementSibling"
+              _="on click toggle .hidden on my.closest('form') then toggle .hidden on my.closest('form').previousElementSibling"
             >
               Forrige
             </button>
