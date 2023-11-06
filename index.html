@@ -7,29 +7,6 @@
     <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
     <script src="https://unpkg.com/htmx.org@1.9.7"></script>
     <link rel="stylesheet" href="/tailwind.css" />
-
-    <script>
-      function isElementVisible(element) {
-        if (element) {
-          let style = window.getComputedStyle(element);
-
-          if (
-            style.display === "none" ||
-            style.visibility !== "visible" ||
-            style.opacity === "0" ||
-            element.offsetHeight === 0 ||
-            element.offsetWidth === 0
-          ) {
-            return false; // element is hidden
-          } else {
-            return true; // element is visible
-          }
-        } else {
-          // element does not exist
-          return false;
-        }
-      }
-    </script>
   </head>
   <body>
     <div class="py-32 container mx-auto">
@@ -37,17 +14,18 @@
         <form
           class="grid gap-4 max-w-prose"
           _="on submit halt the event
-          if the value of #landsdel is '' then
-            put '' into #landsdelResult
-            show .error
-            put 'Vælg landsdel' into .error
-          else
+          if the value of #landsdel then
             put the text of #landsdel.options[#landsdel.selectedIndex] into #landsdelResult
-            
-            if not call isElementVisible(me.querySelector('.error')) then
+
+            get the *display of .error in me
+            if the result is 'none' then
               hide me
               show the next <form/>
             end
+          else
+            put '' into #landsdelResult
+            show .error
+            put 'Vælg landsdel' into .error
           end"
         >
           <h2 class="text-2xl font-semibold tracking-wide">Landsdel</h2>
@@ -86,17 +64,18 @@
           class="grid gap-4 max-w-prose"
           style="display: none"
           _="on submit halt the event
-          if the value of #tagtype is '' then
-            put '' into #tagtypeResult
-            show .error
-            put 'Vælg nuværende tag' into .error
-          else
+          if the value of #tagtype then
             put the text of #tagtype.options[#tagtype.selectedIndex] into #tagtypeResult
             
-            if not call isElementVisible(me.querySelector('.error')) then
+            get the *display of .error in me
+            if the result is 'none' then
               hide me
               show the next <form/>
             end
+          else
+            put '' into #tagtypeResult
+            show .error
+            put 'Vælg nuværende tag' into .error
           end"
         >
           <h2 class="text-2xl font-semibold tracking-wide">Nuværende tag</h2>
@@ -140,17 +119,18 @@
           class="grid gap-4 max-w-prose"
           style="display: none"
           _="on submit halt the event
-          if the value of #grundplan is '' then
-            put '' into #grundplanResult
-            show .error
-            put 'Det felt skal udfyldes.' into .error
-          else
+          if the value of #grundplan then
             put the value of #grundplan into #grundplanResult
             
-            if not call isElementVisible(me.querySelector('.error')) then
+            get the *display of .error in me
+            if the result is 'none' then
               hide me
               show the next <form/>
             end
+          else
+            put '' into #grundplanResult
+            show .error
+            put 'Det felt skal udfyldes.' into .error
           end"
         >
           <h2 class="text-2xl font-semibold tracking-wide">Grundplan</h2>
@@ -192,17 +172,18 @@
           class="grid gap-4 max-w-prose"
           style="display: none"
           _="on submit halt the event
-          if the value of #hustype is '' then
-            put '' into #hustypeResult
-            show .error
-            put 'Det felt skal udfyldes.' into .error
-          else
+          if the value of #hustype then
             put the text of #hustype.options[#hustype.selectedIndex] into #hustypeResult
             
-            if not call isElementVisible(me.querySelector('.error')) then
+            get the *display of .error in me
+            if the result is 'none' then
               hide me
               show the next <form/>
             end
+          else
+            put '' into #hustypeResult
+            show .error
+            put 'Det felt skal udfyldes.' into .error
           end"
         >
           <h2 class="text-2xl font-semibold tracking-wide">Hustype</h2>
@@ -246,17 +227,18 @@
           class="grid gap-4 max-w-prose"
           style="display: none"
           _="on submit halt the event
-          if the value of #taghaeldning is '' then
-            put '' into #taghaeldningResult
-            show .error
-            put 'Det felt skal udfyldes.' into .error
-          else
+          if the value of #taghaeldning then
             put the text of #taghaeldning.options[#taghaeldning.selectedIndex] into #taghaeldningResult
             
-            if not call isElementVisible(me.querySelector('.error')) then
+            get the *display of .error in me
+            if the result is 'none' then
               hide me
               show the next <form/>
             end
+          else
+            put '' into #taghaeldningResult
+            show .error
+            put 'Det felt skal udfyldes.' into .error
           end"
         >
           <h2 class="text-2xl font-semibold tracking-wide">Taghældning</h2>
@@ -297,29 +279,36 @@
           class="grid gap-4 max-w-prose"
           style="display: none"
           _="on submit halt the event
-          if the value of #tagbelaegning is '' then
-            put '' into #tagbelaegningResult
-            show .error
-            put 'Det felt skal udfyldes.' into .error
-          else
+          if the value of #tagbelaegning then
             put the text of #tagbelaegning.options[#tagbelaegning.selectedIndex] into #tagbelaegningResult
 
-            if #eksisterendeTag is :visible then
-              if the textContent of #eksisterendeTag.querySelector('input:checked + label') is '' then
+            get the *display of #eksisterendeTag
+            if the result is 'none' then
+              log 'not visible'
+              put 'Valg ikke nødvendigt' into #eksisterendeTagResult
+            else
+              log 'visible'
+
+              if the textContent of #eksisterendeTag.querySelector('input:checked + label') then
+                log 'not empty'
+                put the textContent of #eksisterendeTag.querySelector('input:checked + label') into #eksisterendeTagResult
+              else
+                log 'empty'
                 put 'Eksisterende tag skal udfyldes.' into .error
                 show .error
-              else
-                put the textContent of #eksisterendeTag.querySelector('input:checked + label') into #eksisterendeTagResult
               end
-            else
-              put 'Valg ikke nødvendigt' into #eksisterendeTagResult
             end
 
-            if not call isElementVisible(me.querySelector('.error')) then
+            get the *display of .error in me
+            if the result is 'none' then
               hide me
               show the next <form/>
               send calculatePrice to the next <form/>
             end
+          else
+            put '' into #tagbelaegningResult
+            show .error
+            put 'Det felt skal udfyldes.' into .error
           end"
         >
           <h2 class="text-2xl font-semibold tracking-wide">
@@ -353,14 +342,26 @@
           <div id="eksisterendeTag" role="radio-group" style="display: none">
             <h3 class="text-lg font-medium">Eksisterende tag</h3>
 
-            <input type="radio" id="option1" name="tag" value="option1" />
+            <input
+              type="radio"
+              id="option1"
+              name="tag"
+              value="option1"
+              _="on change hide .error"
+            />
             <label for="option1">
               Eksisterende tag skal af og undertag skal etableres
             </label>
 
             <br />
 
-            <input type="radio" id="option2" name="tag" value="option2" />
+            <input
+              type="radio"
+              id="option2"
+              name="tag"
+              value="option2"
+              _="on change hide .error"
+            />
             <label for="option2"
               >Taget skal lægges ovenpå eksisterende tag</label
             >
